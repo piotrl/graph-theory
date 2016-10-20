@@ -143,8 +143,8 @@ describe(`Adjacency matrix`, function () {
 
             const parity = matrix.parity();
 
-            assert.deepEqual(parity.odd.length, 3);
-            assert.deepEqual(parity.even.length, 2);
+            assert.deepEqual(parity.even.length, 3);
+            assert.deepEqual(parity.odd.length, 2);
         });
 
         it(`Example with all points connected`, function () {
@@ -158,8 +158,8 @@ describe(`Adjacency matrix`, function () {
             assert.deepEqual(parity.even.length, 3);
             assert.deepEqual(parity.odd.length, 0);
 
-            console.log(`1c) stopnie wierzcholkow przyste \n`, parity.even);
-            console.log(`1c) stopnie wierzcholkow nieparzyste \n`, parity.odd);
+            console.log(` 1c) stopnie wierzcholkow przyste: \n\n`, parity.even, "\n\n");
+            console.log(` 1c) stopnie wierzcholkow nieparzyste: \n\n`, parity.odd, "\n\n");
         });
     });
 
@@ -175,7 +175,7 @@ describe(`Adjacency matrix`, function () {
             assert.deepEqual(pointsDegree.map(point => point.degree), [3, 2, 1, 0, 2]);
 
             pointsDegree.sort((a, b) => b.degree - a.degree);
-            console.log(`1d) stopnie wierzcholkow \n`, pointsDegree);
+            console.log(`\n 1d) stopnie wierzcholkow \n`, pointsDegree);
         });
     });
 });

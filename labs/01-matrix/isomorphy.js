@@ -12,7 +12,7 @@ class C3Isomorh {
                     if (isGraphIsomorphic(adjacencyMatrix, i, j, k)) {
                         return {
                             value: true,
-                            graph: this.foundSubGraph(graph, i, j, k)
+                            graph: foundSubGraph(graph, i, j, k)
                         }
                     }
                 }
@@ -36,11 +36,12 @@ class C3Isomorh {
     }
 
     isIsomorphicOptimised(graph) {
+        const size = graph.get().length;
         const A = math.matrix(graph.get());
         const A2 = math.multiply(A, A);
 
-        for (let x = 0; x < A.size(); x++) {
-            for (let y = x + 1; y < A.size(); y++) {
+        for (let x = 0; x < size; x++) {
+            for (let y = x + 1; y < size; y++) {
                 if (isGraphIsomorphic(x, y)) {
                     return true
                 }
@@ -51,7 +52,7 @@ class C3Isomorh {
 
         function isGraphIsomorphic(x, y) {
             return A.toArray()[x][y] === 1 &&
-                  A2.toArray()[x][y] === 1
+                A2.toArray()[x][y] === 1
         }
     }
 }

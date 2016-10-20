@@ -78,11 +78,11 @@ class AdjacencyMatrixGraph {
     }
 
     parity() {
-        const degrees = this.countDegreeForAllPoints();
+        const pointsWithDegree = this.countDegreeForAllPoints();
 
         return {
-            even: degrees.filter(point => point.degree % 2 === 0),
-            odd: degrees.filter(point => point.degree % 2 === 1)
+            even: pointsWithDegree.filter(point => point.degree % 2 === 0),
+            odd: pointsWithDegree.filter(point => point.degree % 2 === 1)
         }
     }
 
