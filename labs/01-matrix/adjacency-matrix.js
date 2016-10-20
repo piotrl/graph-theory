@@ -27,7 +27,7 @@ class AdjacencyMatrixGraph {
         const j = this.vertex.indexOf(edge[1]);
 
         if (i === -1 || j === -1) {
-            throw Error(`Point (${i}, ${j}) not found`);
+            throw Error(`Point (${edge[0]}, ${edge[1]}) not found`);
         }
 
         this.array[i][j] = 1;

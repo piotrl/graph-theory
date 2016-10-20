@@ -1,13 +1,6 @@
 const math = require('mathjs');
-const AdjencyMatrix = require('./adjacency-matrix');
 
 class C3Isomorh {
-    constructor() {
-        this.C3 = new AdjencyMatrix([1, 2, 3])
-            .addEdge(1, 2)
-            .addEdge(1, 3)
-            .addEdge(2, 3);
-    }
 
     isIsomorphicNaive(graph) {
         const adjacencyMatrix = graph.get();
