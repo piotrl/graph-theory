@@ -1,0 +1,13 @@
+{
+  "name": "graph-theory-alg",
+  "version": "1.0.0",
+  "description": "Study assigments",
+  "main": "index.js",
+  "author": "Piotr Lewandowski",
+  "license": "MIT",
+  "dependencies": {
+    "chai": "^3.5.0",
+    "mathjs": "^3.5.3",
+    "mocha": "^3.1.2"
+  }
+}
