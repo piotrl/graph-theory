@@ -2,6 +2,12 @@ const AdjacencyMatrixGraph = require('./adjacency-matrix');
 
 class GraphSeries {
 
+
+    /**
+     * @see http://www.deltami.edu.pl/temat/informatyka/algorytmy/2011/11/01/Odtwarzanie_grafu/
+     * @param series - list of numbers
+     * @returns Adjacency matrix
+     */
     findAnySimpleGraph(series) {
         if (!this.isGraphSequency(series)) {
             throw Error("${series} is not graph series. Cannot find graphs.");
@@ -26,7 +32,7 @@ class GraphSeries {
 
             for (let i = 0; i < first.degree; i++) {
                 series[i].degree--;
-                console.log(`${first.point}, ${series[i].point}`);
+                console.log(`${first.point} - ${series[i].point}`);
                 graph.addEdge(first.point, series[i].point);
             }
         }
@@ -36,8 +42,10 @@ class GraphSeries {
 
     // Havel–Hakimi
     isGraphSequency(series) {
+        console.log('isGraphSequency');
         while (series.length > 0) {
             series.sort((a, b) => b - a);
+            console.log('series', series);
 
             const first = series[0];
             series = series.slice(1);
