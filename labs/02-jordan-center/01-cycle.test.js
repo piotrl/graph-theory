@@ -51,11 +51,32 @@ describe(`Stopien grafu`, function () {
                 .addEdge(3, 4);
         });
 
-        it(`Traverse from one point`, function () {
+        it(`Traverse from point 1`, function () {
             const cycle = new Cycle(matrix);
 
-            const trace = cycle.traverse();
-            assert.sameMembers(trace, [1, 2, 3, 1]);
+            const trace = cycle.traverse(1);
+            assert.deepEqual(trace, [1, 2, 3, 1]);
+        });
+
+        it(`Traverse from point 2`, function () {
+            const cycle = new Cycle(matrix);
+
+            const trace = cycle.traverse(2);
+            assert.deepEqual(trace, [2, 1, 3, 2]);
+        });
+
+        it(`Traverse from point 3`, function () {
+            const cycle = new Cycle(matrix);
+
+            const trace = cycle.traverse(3);
+            assert.deepEqual(trace, [3, 1, 2, 3]);
+        });
+
+        it(`Traverse from point 4`, function () {
+            const cycle = new Cycle(matrix);
+
+            const trace = cycle.traverse(4);
+            assert.deepEqual(trace, [2, 1, 3, 2]);
         });
     });
 });

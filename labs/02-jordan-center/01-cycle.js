@@ -3,14 +3,15 @@ class CycleFinder {
         this.graph = graph;
     }
 
-    traverse() {
-        const firstPoint = this.graph.points()[0];
+    traverse(firstPoint) {
+        firstPoint = firstPoint || this.graph.points()[0];
         return this.goNext(firstPoint, []);
     }
 
     goNext(point, trace) {
         if (trace.indexOf(point) !== -1) {
-            return trace;
+            trace.push(point);
+            return this.extractCycleFromTrace(trace);
         }
         trace.push(point);
 
@@ -18,9 +19,15 @@ class CycleFinder {
             if (edgePoint === trace[trace.length - 2]) {
                 continue;
             }
-            console.log(point, edgePoint);
             return this.goNext(edgePoint, trace);
         }
+    }
+
+    extractCycleFromTrace(trace) {
+        const lastElement = trace[trace.length - 1];
+        const firstElementIndex = trace.indexOf(lastElement);
+
+        return trace.splice(firstElementIndex);
     }
 
     edgesForPoint(point) {
