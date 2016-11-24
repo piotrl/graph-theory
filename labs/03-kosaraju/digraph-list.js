@@ -34,7 +34,7 @@ class DiGraph {
     }
 
     getSiblings(vertex) {
-        return this.lists[vertex];
+        return Object.assign(this.lists[vertex]);
     }
 
     addEdge(fromVertex, toVertex) {
