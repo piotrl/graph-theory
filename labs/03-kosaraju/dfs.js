@@ -1,14 +1,19 @@
 class DFS {
     constructor(digraph) {
-        this.graph = digraph;
+        this.digraph = digraph;
+    }
+
+    init() {
         this.visited = {};
         this.order = [];
         this.stack = [];
+
+        return Object.assign(this.digraph);
     }
 
-    search(searchedNode) {
-        const graph = Object.assign(this.graph);
-        const node = graph.first;
+    search(start, searchedNode) {
+        const graph = this.init();
+        const node = start;
 
         if (node && !this.visited[node]) {
             this.stack.push(node);
