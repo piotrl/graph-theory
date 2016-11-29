@@ -6,6 +6,7 @@ const assert = chai.assert;
 const expect = chai.expect;
 
 describe(`DFS`, function () {
+
     describe(`search`, function () {
         it(`basic found example`, function () {
             const graph = new DiGraph(["a", "b", "c", "d"], [
@@ -32,6 +33,21 @@ describe(`DFS`, function () {
             assert.isFalse(isFound);
         });
 
+        it(`example from internet`, function () {
+            const digraph = new DiGraph(['S', 'A', 'B', 'C', 'D'])
+                .addEdge('S', 'A')
+                .addEdge('S', 'B')
+                .addEdge('S', 'C')
+                .addEdge('A', 'D')
+                .addEdge('B', 'D')
+                .addEdge('C', 'D');
+
+            const dfs = new DFS(digraph);
+            dfs.search(digraph.first);
+
+            assert.deepEqual(dfs.order, ['S', 'A', 'D', 'B', 'C']);
+        });
+
         it(`Post order`, function () {
             const digraph = new DiGraph([1, 2, 3, 4, 5, 6, 7, 8, 9])
                 .addEdge(1, 2)
@@ -46,9 +62,9 @@ describe(`DFS`, function () {
                 .addEdge(9, 8);
 
             const dfs = new DFS(digraph);
-            dfs.search(digraph.first);
+            dfs.postOrder(digraph.first);
 
-            assert.deepEqual(dfs.order, [7, 9, 8, 6, 5, 3, 2, 4, 1]);
+            assert.deepEqual(dfs.postOrderStack, [7, 9, 8, 6, 5, 3, 2, 4, 1]);
             // assert.deepEqual(dfs.postOrder, [7, 9, 8, 6, 5, 3, 2, 4, 1]);
         });
     });

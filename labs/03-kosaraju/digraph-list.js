@@ -14,13 +14,11 @@ class DiGraph {
     }
 
     get first() {
-        const nodes = Object.keys(this._lists);
-
-        return nodes.length ? nodes[0] : undefined;
+        return this.nodes[0];
     }
 
     get lists() {
-        return this._lists
+        return this._lists;
     };
     
     reverse() {
@@ -41,6 +39,7 @@ class DiGraph {
         const vertexList = this.lists[fromVertex];
 
         if (vertexList) {
+            this.edges.push([fromVertex, toVertex]);
             vertexList.push(toVertex);
         } else {
             throw Error(`Point (${fromVertex}, ${toVertex}) not found`);

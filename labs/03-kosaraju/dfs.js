@@ -1,25 +1,41 @@
 class DFS {
     constructor(digraph) {
-        this.digraph = digraph;
+        this.digraph = this.init(digraph);
     }
 
-    init() {
+    init(digraph) {
         this.visited = {};
         this.order = [];
+        this.postOrderStack = [];
         this.stack = [];
 
-        return Object.assign(this.digraph);
+        return Object.assign(digraph);
+    }
+
+    postOrder(node) {
+        console.log("pre-order", node, typeof node);
+        this.visited[node] = true;
+
+        this.digraph.getSiblings(node)
+            .sort().reverse()
+            .forEach(sibling => {
+                if (sibling && !this.visited[sibling]) {
+                    this.postOrder(sibling);
+                }
+            });
+
+        this.postOrderStack.push(node);
     }
 
     search(start, searchedNode) {
-        const graph = this.init();
+        const graph = this.init(this.digraph);
         const node = start;
 
         if (node && !this.visited[node]) {
             this.stack.push(node);
         }
 
-        while (this.stack.length) {
+        while (this.stack.length >= 0) {
             const node = this.stack.pop();
             if (this.visited[node]) {
                 continue;
@@ -27,9 +43,6 @@ class DFS {
 
             this.order.push(node);
             this.visited[node] = true;
-            if (node === searchedNode) {
-                return true;
-            }
             this.addOrderedNodesToStack(graph.getSiblings(node));
         }
 
