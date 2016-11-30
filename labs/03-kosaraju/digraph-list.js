@@ -20,10 +20,9 @@ class DiGraph {
     get lists() {
         return this._lists;
     };
-    
+
     reverse() {
         const graph = new DiGraph(this.nodes);
-        
         this.edges.forEach(edge => {
             graph.addEdge(edge[1], edge[0]);
         });
@@ -32,11 +31,14 @@ class DiGraph {
     }
 
     getSiblings(vertex) {
-        return Object.assign(this.lists[vertex]);
+        if (!this._lists[vertex]) {
+            return [];
+        }
+        return Object.assign(this._lists[vertex]);
     }
 
     addEdge(fromVertex, toVertex) {
-        const vertexList = this.lists[fromVertex];
+        const vertexList = this._lists[fromVertex];
 
         if (vertexList) {
             this.edges.push([fromVertex, toVertex]);
@@ -46,6 +48,25 @@ class DiGraph {
         }
 
         return this;
+    }
+
+    removeNode(nodeToDelete) {
+        const nodeIndex = this.nodes.indexOf(nodeToDelete);
+        this.nodes.splice(nodeIndex, 1);
+
+        const siblingsList = this._lists[nodeToDelete];
+        if (siblingsList) {
+            delete this._lists[nodeToDelete];
+        }
+
+        Object.keys(this._lists).map(key => this._lists[key])
+            .forEach(vertexList => {
+                vertexList.forEach((node, index) => {
+                    if (nodeToDelete === node) {
+                        delete vertexList[index];
+                    }
+                });
+            })
     }
 }
 

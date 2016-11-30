@@ -9,9 +9,7 @@ class Kosajaru {
 
     scc() {
         const graph = Object.assign(this.digraph);
-        const dfs = new DFS(graph);
-        dfs.search(graph.first);
-        this.stack = dfs.order;
+        this.stack = this.postOrderNodes(graph, graph.first);
 
         let G1 = graph.reverse();
 
@@ -27,10 +25,16 @@ class Kosajaru {
         return this.components;
     }
 
-    findComponent(G1, x) {
-        const dfs = new DFS(G1);
-        dfs.search(x);
-        return dfs.order;
+    postOrderNodes(graph, startNode) {
+        const dfs = new DFS(graph);
+        dfs.postOrder(startNode);
+        return dfs.postOrderStack;
+    }
+
+    findComponent(graph, startNode) {
+        const dfs = new DFS(graph);
+        dfs.singlePathPostOrder(startNode);
+        return dfs.postOrderStack;
     }
 
     removeNodesFromStack(component) {
@@ -44,7 +48,7 @@ class Kosajaru {
 
     removeNodesFromGraph(component, graph) {
         component.forEach(node => {
-            delete graph.lists[node];
+            graph.removeNode(node);
         })
     }
 

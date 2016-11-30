@@ -30,11 +30,11 @@ describe(`Kosaraju alghorithm`, function () {
             const kosaraju = new Kosaraju(diGraph);
             const scc = kosaraju.scc();
 
-            // assert.equal(kosaraju.count, 5);
+            assert.equal(kosaraju.count, 5);
             assert.deepEqual(scc, [
-                [1], [2], [4],
-                [3, 5, 6, 7],
-                [8, 9]
+                [1], [4],
+                [5, 6, 7, 3],
+                [9, 8], [2]
             ]);
         });
     });
