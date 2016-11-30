@@ -4,7 +4,9 @@ class DFS {
     }
 
     init(digraph) {
-        this.visited = {};
+        this.visited = digraph.nodes
+            .map(key => ({key: key, visited: false}));
+
         this.order = [];
         this.postOrderStack = [];
         this.stack = [];
@@ -12,30 +14,58 @@ class DFS {
         return Object.assign(digraph);
     }
 
-    postOrder(node) {
-        console.log("pre-order", node, typeof node);
-        this.visited[node] = true;
+    postOrder(start) {
+        this.singlePathPostOrder(start);
+
+        // for rest of not found
+        let notVisitedNodes = this.visited.filter(nodeParam => !nodeParam.visited);
+        notVisitedNodes.forEach(nodeParams => {
+            this.singlePathPostOrder(nodeParams.key);
+        });
+    }
+
+    singlePathPostOrder(node) {
+        if (this.isVisited(node)) {
+            return;
+        } else {
+            this.markVisited(node);
+        }
 
         this.digraph.getSiblings(node)
-            .sort().reverse()
+            .sort()
             .forEach(sibling => {
-                if (sibling && !this.visited[sibling]) {
-                    this.postOrder(sibling);
+                if (!this.isVisited(sibling)) {
+                    this.singlePathPostOrder(sibling);
                 }
             });
 
         this.postOrderStack.push(node);
     }
 
-    search(start, searchedNode) {
-        const graph = this.init(this.digraph);
+    markVisited(node) {
+        const nodeParam = this.visited.find(nodeParams => nodeParams.key === node);
+        if (!nodeParam) {
+            throw Error(`Not found node: ${node}`);
+        }
+        nodeParam.visited = true;
+    }
+
+    isVisited(node) {
+        const nodeParam = this.visited.find(nodeParams => nodeParams.key === node);
+        if (!nodeParam) {
+            throw Error(`Not found node: ${node}`);
+        }
+        return nodeParam.visited;
+    }
+
+    search(start) {
         const node = start;
 
         if (node && !this.visited[node]) {
             this.stack.push(node);
         }
 
-        while (this.stack.length >= 0) {
+        while (this.stack.length > 0) {
             const node = this.stack.pop();
             if (this.visited[node]) {
                 continue;
@@ -43,7 +73,7 @@ class DFS {
 
             this.order.push(node);
             this.visited[node] = true;
-            this.addOrderedNodesToStack(graph.getSiblings(node));
+            this.addOrderedNodesToStack(this.digraph.getSiblings(node));
         }
 
         return false;
@@ -51,7 +81,7 @@ class DFS {
 
     addOrderedNodesToStack(siblings) {
         siblings.sort().reverse() // Alphabetical order
-            .forEach((nextNode) => {
+            .forEach(nextNode => {
                 if (this.visited[nextNode]) return;
 
                 this.stack.push(nextNode);

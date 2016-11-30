@@ -15,7 +15,7 @@ describe(`DFS`, function () {
                 ["c", "d"]
             ]);
             const dfs = new DFS(graph);
-            const isFound = dfs.search(digraph.first, "d");
+            const isFound = dfs.search(graph.first, "d");
 
             assert.isTrue(isFound);
             assert.deepEqual(dfs.order, ["a", "b", "c", "d"]);
@@ -28,7 +28,7 @@ describe(`DFS`, function () {
                 ["c", "d"]
             ]);
             const dfs = new DFS(graph);
-            const isFound = dfs.search(digraph.first, "e");
+            const isFound = dfs.search(graph.first, "e");
 
             assert.isFalse(isFound);
         });
@@ -48,7 +48,7 @@ describe(`DFS`, function () {
             assert.deepEqual(dfs.order, ['S', 'A', 'D', 'B', 'C']);
         });
 
-        it(`Post order`, function () {
+        it(`Post order from begining of graph`, function () {
             const digraph = new DiGraph([1, 2, 3, 4, 5, 6, 7, 8, 9])
                 .addEdge(1, 2)
                 .addEdge(1, 4)
@@ -62,10 +62,28 @@ describe(`DFS`, function () {
                 .addEdge(9, 8);
 
             const dfs = new DFS(digraph);
-            dfs.postOrder(digraph.first);
+            dfs.postOrder(1);
 
             assert.deepEqual(dfs.postOrderStack, [7, 9, 8, 6, 5, 3, 2, 4, 1]);
-            // assert.deepEqual(dfs.postOrder, [7, 9, 8, 6, 5, 3, 2, 4, 1]);
+        });
+
+        it(`Post order from middle of graph`, function () {
+            const digraph = new DiGraph([1, 2, 3, 4, 5, 6, 7, 8, 9])
+                .addEdge(1, 2)
+                .addEdge(1, 4)
+                .addEdge(1, 3)
+                .addEdge(3, 5)
+                .addEdge(5, 6)
+                .addEdge(6, 7)
+                .addEdge(7, 3)
+                .addEdge(6, 8)
+                .addEdge(8, 9)
+                .addEdge(9, 8);
+
+            const dfs = new DFS(digraph);
+            dfs.postOrder(3);
+
+            assert.deepEqual(dfs.postOrderStack, [7, 9, 8, 6, 5, 3, 2, 4, 1]);
         });
     });
 });
