@@ -10,6 +10,9 @@ class DiGraph {
     }
 
     weight(u, v) {
+        if (u === v) {
+            return 0;
+        }
         const edge = this.findEdge(u, v);
 
         if (edge && edge.weight != null) {
@@ -52,6 +55,14 @@ class DiGraph {
         } else {
             throw Error(`Point (${from}, ${to}) not found`);
         }
+
+        return this;
+    }
+
+    symetricEdges() {
+        this.edges.forEach(edge => {
+            this.addEdge(edge.to, edge.from, edge.weight);
+        });
 
         return this;
     }
