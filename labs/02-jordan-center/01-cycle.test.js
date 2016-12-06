@@ -5,8 +5,8 @@ const Cycle = require(`./01-cycle`);
 const assert = chai.assert;
 const expect = chai.expect;
 
-describe(`Stopien grafu`, function () {
-    describe(`Pre-calculations`, function () {
+describe(`Finding cycle in graph`, function () {
+    describe(`Helper methods - finding edges and degree`, function () {
         let matrix;
         before(function () {
             matrix = new AdjacencyMatrix([1, 2, 3, 4])
@@ -77,6 +77,72 @@ describe(`Stopien grafu`, function () {
 
             const trace = cycle.traverse(4);
             assert.deepEqual(trace, [2, 1, 3, 2]);
+        });
+    });
+
+    describe(`Traverse graph with complicated paths`, function () {
+        let matrix;
+        before(function () {
+            matrix = new AdjacencyMatrix([1, 2, 9, 4, 5, 6, 7])
+                .addEdge(1, 2)
+                .addEdge(2, 9)
+                .addEdge(2, 4)
+                .addEdge(4, 5)
+                .addEdge(9, 6)
+                .addEdge(6, 7)
+                .addEdge(7, 9);
+        });
+
+        it(`Traverse from point 1`, function () {
+            const cycle = new Cycle(matrix);
+
+            const trace = cycle.traverse(1);
+            assert.deepEqual(trace, [9, 6, 7, 9]);
+        });
+
+        it(`Traverse from point 9`, function () {
+            const cycle = new Cycle(matrix);
+
+            const trace = cycle.traverse(9);
+            assert.deepEqual(trace, [9, 6, 7, 9]);
+        });
+
+        it(`Traverse from point 4`, function () {
+            const cycle = new Cycle(matrix);
+
+            const trace = cycle.traverse(4);
+            assert.deepEqual(trace, [9, 6, 7, 9]);
+        });
+    });
+
+    describe(`Traverse not connected graphs`, function () {
+        let matrix;
+        before(function () {
+            matrix = new AdjacencyMatrix([1, 2, 3, 4])
+                .addEdge(2, 3)
+                .addEdge(3, 4)
+                .addEdge(4, 2);
+        });
+
+        it(`Traverse from point 1`, function () {
+            const cycle = new Cycle(matrix);
+
+            const trace = cycle.traverse(1);
+            assert.deepEqual(trace, [2, 3, 4, 2]);
+        });
+
+        it(`Traverse from point 3`, function () {
+            const cycle = new Cycle(matrix);
+
+            const trace = cycle.traverse(3);
+            assert.deepEqual(trace, [3, 6, 7, 3]);
+        });
+
+        it(`Traverse from point 4`, function () {
+            const cycle = new Cycle(matrix);
+
+            const trace = cycle.traverse(4);
+            assert.deepEqual(trace, [2, 3, 6, 7, 3]);
         });
     });
 });
