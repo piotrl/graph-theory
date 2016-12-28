@@ -4,21 +4,21 @@ class Djikstra {
     }
 
     findShortestPath(startPoint) {
-        const path = this.initPath(startPoint);
+        const pathLength = this.initPath(startPoint);
         this.digraph.removeNode(startPoint);
 
         while (this.digraph.nodes.length > 0) {
-            const minNodeInPath = this.min(path, this.digraph.nodes);
+            const minNodeInPath = this.min(pathLength, this.digraph.nodes);
             this.digraph.nodes.forEach(node => {
-                path[node] = Math.min(
-                    path[node],
-                    path[minNodeInPath] + this.digraph.weight(minNodeInPath, node)
+                pathLength[node] = Math.min(
+                    pathLength[node],
+                    pathLength[minNodeInPath] + this.digraph.weight(minNodeInPath, node)
                 );
             });
             this.digraph.removeNode(minNodeInPath);
         }
 
-        return path;
+        return pathLength;
     }
 
     initPath(startPoint) {
