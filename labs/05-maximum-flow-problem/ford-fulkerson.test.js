@@ -1,27 +1,34 @@
 const chai = require(`chai`);
-const DiGraph = require(`./digraph-weight`);
+const DiGraph = require(`../04-djikstra-shortest-path/digraph-weight`);
 const FordFulkerson = require(`./ford-fulkerson`);
 
 const assert = chai.assert;
 
 describe(`FordFulkerson method`, function () {
     describe(`Finding maximum flow`, function () {
-        it(`Example from lecture #1 for point 1`, function () {
-            const diGraph = new DiGraph([1, 2, 3, 4, 5, 6])
-                    .addEdge(1, 2, 1)
-                    .addEdge(1, 4, 2)
-                    .addEdge(4, 2, 4)
-                    .addEdge(2, 3, 6)
-                    .addEdge(4, 5, 3)
-                    .addEdge(3, 5, 1)
-                    .addEdge(3, 6, 4)
-                    .addEdge(5, 6, 1)
-                ;
-            const fordFulkerson = new FordFulkerson(diGraph);
+        let network;
 
+        beforeEach(function () {
+            network = new DiGraph(["s", "v1", "v2", "v3", "v4", "t"])
+                    .addEdge("s", "v1", 16)
+                    .addEdge("s", "v2", 13)
+                    .addEdge("v1", "v2", 10)
+                    .addEdge("v1", "v3", 12)
+                    .addEdge("v2", "v1", 4)
+                    .addEdge("v2", "v4", 14)
+                    .addEdge("v3", "v2", 9)
+                    .addEdge("v3", "t", 20)
+                    .addEdge("v4", "v3", 7)
+                    .addEdge("v4", "t", 4)
+                ;
         });
 
+        it(`Finding extending path`, function () {
+            const fordFulkerson = new FordFulkerson(network, "s", "t");
+            const path = fordFulkerson.extendingPath();
 
-
+            // longest path - not very good solution
+            assert.deepEqual(path, ["s", "v1", "v2", "v3", "v4", "t"]);
+        });
     });
 });
