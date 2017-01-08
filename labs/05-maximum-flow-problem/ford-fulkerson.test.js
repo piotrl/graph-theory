@@ -45,7 +45,7 @@ describe(`FordFulkerson method`, function () {
             const fordFulkerson = new FordFulkerson(network, "s", "t");
             const maxFlow = fordFulkerson.startAlgorithm();
 
-            assert.deepEqual(maxFlow, 17);
+            assert.deepEqual(maxFlow, 7);
         });
 
         it(`Excercise 2`, function () {

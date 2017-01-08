@@ -1,17 +1,16 @@
 class DFS {
     constructor(digraph) {
-        this.digraph = this.init(digraph);
+        this.init(digraph);
     }
 
     init(digraph) {
-        this.visited = digraph.nodes
+        this.digraph = Object.assign(digraph);
+        this.visited = this.digraph.nodes
             .map(key => ({key: key, visited: false}));
 
         this.order = [];
         this.postOrderStack = [];
         this.stack = [];
-
-        return Object.assign(digraph);
     }
 
     postOrder(start) {
@@ -67,12 +66,12 @@ class DFS {
 
         while (this.stack.length > 0) {
             const node = this.stack.pop();
-            if (this.visited[node]) {
+            if (this.isVisited(node)) {
                 continue;
             }
 
             this.order.push(node);
-            this.visited[node] = true;
+            this.markVisited(node);
             if (end === node) {
                 return true;
             }
@@ -85,11 +84,12 @@ class DFS {
     addOrderedNodesToStack(siblings) {
         siblings.sort().reverse() // Alphabetical order
             .forEach(nextNode => {
-                if (this.visited[nextNode]) return;
+                if (this.isVisited(nextNode)) return;
 
                 this.stack.push(nextNode);
             });
         return siblings;
     }
+
 }
 module.exports = DFS;
