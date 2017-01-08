@@ -28,7 +28,23 @@ describe(`FordFulkerson method`, function () {
             const path = fordFulkerson.extendingPath();
 
             // longest path - not very good solution
-            assert.deepEqual(path, ["s", "v1", "v2", "v3", "v4", "t"]);
+            assert.deepEqual(path, [ "s", "v1", "v2", "v4", "t" ]);
+        });
+
+        it(`Calculate bottleneck`, function () {
+            const fordFulkerson = new FordFulkerson(network, "s", "t");
+            const path = ["s", "v1", "v3", "t"];
+            const bottleneck = fordFulkerson.bottleneckCapacity(path);
+
+            assert.deepEqual(bottleneck, 12);
+        });
+
+        it(`Calculate bottleneck of long path`, function () {
+            const fordFulkerson = new FordFulkerson(network, "s", "t");
+            const path = [ "s", "v1", "v2", "v4", "t"];
+            const bottleneck = fordFulkerson.bottleneckCapacity(path);
+
+            assert.deepEqual(bottleneck, 4);
         });
     });
 });

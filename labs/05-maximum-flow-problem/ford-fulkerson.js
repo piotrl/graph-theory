@@ -10,6 +10,7 @@ class FordFulkerson {
         this.f = [];
         this.cf = {};
         this.digraph = Object.assign(digraph);
+        this.residual = Object.assign(digraph);
     }
 
     startAlghorithm() {
@@ -18,13 +19,12 @@ class FordFulkerson {
 
         let p = this.extendingPath();
         while (p.length > 0) {
-            // compute bottleneck capacity
-            const cfp = [];
-            for (let i = 0; i < p.length - 1; i++) {
-                const u = p[i];
-                const v = p[i + 1];
-                const nettoValue = this.digraph.weight(u, v);
+            // compute bottleneckCapacity capacity
+            const bottleneck = this.bottleneckCapacity(p);
 
+            for (let i = 0; i < p.length - 1; i++) {
+                const u = path[i];
+                const v = path[i + 1];
 
                 this.f[u][v] = this.f[u][v] + cf(p);
                 this.f[v][u] = this.f[v][u] - cf(p);
@@ -37,13 +37,16 @@ class FordFulkerson {
         return this.f;
     }
 
-    bottleneck(path) {
+    bottleneckCapacity(path) {
         let bottle = Infinity;
-        for (let i = 0; i < p.length - 1; i++) {
-            const u = p[i];
-            const v = p[i + 1];
-            const nettoValue = this.digraph.weight(u, v);
+        for (let i = 0; i < path.length - 1; i++) {
+            const u = path[i];
+            const v = path[i + 1];
+            const nettoValue = this.residual.weight(u, v);
+            bottle = Math.min(bottle, nettoValue);
         }
+
+        return bottle;
     }
 
     /**
