@@ -58,10 +58,8 @@ class DFS {
     }
 
     search(start, end) {
-        const node = start;
-
-        if (node && !this.visited[node]) {
-            this.stack.push(node);
+        if (!this.isVisited(start)) {
+            this.stack.push(start);
         }
 
         while (this.stack.length > 0) {
@@ -82,7 +80,7 @@ class DFS {
     }
 
     addOrderedNodesToStack(siblings) {
-        siblings.sort().reverse() // Alphabetical order
+        siblings.sort()
             .forEach(nextNode => {
                 if (this.isVisited(nextNode)) return;
 

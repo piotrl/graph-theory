@@ -1,7 +1,5 @@
 const DFS = require(`./dfs`);
 
-
-// Edmonds–Karp actually
 class FordFulkerson {
     constructor(digraph, source, sink) {
         this.source = source;
@@ -25,14 +23,21 @@ class FordFulkerson {
     }
 
     bottleneckCapacity(path) {
-        let bottle = Infinity;
+        const min = {
+            bottle: Infinity,
+            u: "",
+            v: ""
+        };
         this.forEachEdge(path, (u, v) => {
             const nettoValue = this.residual.weight(u, v);
-            bottle = Math.min(bottle, nettoValue);
+            if (nettoValue < min.bottle) {
+                min.bottle = nettoValue;
+                min.u = u;
+                min.v = v;
+            }
         });
-
-        console.log("Bottleneck: ", bottle);
-        return bottle;
+        console.log(`Bottleneck(${min.u}, ${min.v}) = ${min.bottle}`);
+        return min.bottle;
     }
 
     residualGraphUpdate(path, bottleneck) {
@@ -41,11 +46,19 @@ class FordFulkerson {
             const edge = this.useEdgeOrCreate(u, v);
             const symmetric = this.useEdgeOrCreate(v, u);
 
-            symmetric.weight = symmetric.weight + bottleneck;
-            edge.weight = edge.weight - bottleneck;
+            if ((edge.weight || 0) - bottleneck < 0) {
+                console.log("WRONG: edge.weight < 0", u, v, path);
+            }
+
+            symmetric.weight = (symmetric.weight || 0) + bottleneck;
+            edge.weight = (edge.weight || 0) - bottleneck;
 
             if (edge.weight === 0) {
                 graph.removeEdge(u, v);
+            }
+
+            if (symmetric.weight === 0) {
+                graph.removeEdge(v, u);
             }
         });
     }
@@ -81,11 +94,6 @@ class FordFulkerson {
             const v = path[i + 1];
             cb(u, v);
         }
-    }
-
-    initFlow() {
-        return Array.apply(null, new Array(this.vertex.length))
-            .map(() => new Array(this.vertex.length).fill(0));
     }
 
     validate() {
