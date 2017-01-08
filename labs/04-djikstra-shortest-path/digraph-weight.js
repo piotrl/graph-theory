@@ -9,12 +9,15 @@ class DiGraph {
         });
     }
 
-    weight(u, v) {
+    weight(u, v, newValue) {
         if (u === v) {
             return 0;
         }
         const edge = this.findEdge(u, v);
 
+        if (edge && newValue) {
+            edge.weight = newValue;
+        }
         if (edge && edge.weight != null) {
             return edge.weight;
         }
@@ -90,7 +93,7 @@ class DiGraph {
             this.nodes.splice(nodeIndex, 1);
         }
 
-        const siblings  = this.getSiblings(nodeToDelete);
+        const siblings = this.getSiblings(nodeToDelete);
         siblings.forEach(node => {
             this.removeEdge(node, nodeToDelete);
             this.removeEdge(nodeToDelete, node);

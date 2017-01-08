@@ -6,47 +6,57 @@ class FordFulkerson {
     constructor(digraph, source, sink) {
         this.source = source;
         this.sink = sink;
-        this.maxFlow = 0;
-        this.f = [];
-        this.cf = {};
-        this.digraph = Object.assign(digraph);
         this.residual = Object.assign(digraph);
     }
 
-    startAlghorithm() {
-        this.cf[this.source] = Infinity;
-        this.f = this.initFlow();
-
+    startAlgorithm() {
+        let maxFlow = 0;
         let p = this.extendingPath();
         while (p.length > 0) {
-            // compute bottleneckCapacity capacity
             const bottleneck = this.bottleneckCapacity(p);
+            this.residualGraphUpdate(p, bottleneck);
 
-            for (let i = 0; i < p.length - 1; i++) {
-                const u = path[i];
-                const v = path[i + 1];
-
-                this.f[u][v] = this.f[u][v] + cf(p);
-                this.f[v][u] = this.f[v][u] - cf(p);
-            }
-
-            this.extendFlow(p);
+            maxFlow += bottleneck;
+            console.log("Max flow: ", maxFlow);
             p = this.extendingPath();
         }
 
-        return this.f;
+        return maxFlow;
     }
 
     bottleneckCapacity(path) {
         let bottle = Infinity;
-        for (let i = 0; i < path.length - 1; i++) {
-            const u = path[i];
-            const v = path[i + 1];
+        this.forEachEdge(path, (u, v) => {
             const nettoValue = this.residual.weight(u, v);
             bottle = Math.min(bottle, nettoValue);
-        }
+        });
 
+        console.log("Bottleneck: ", bottle);
         return bottle;
+    }
+
+    residualGraphUpdate(path, bottleneck) {
+        const graph = this.residual;
+        this.forEachEdge(path, (u, v) => {
+            const edge = this.useEdgeOrCreate(u, v);
+            const symmetric = this.useEdgeOrCreate(v, u);
+
+            symmetric.weight = symmetric.weight + bottleneck;
+            edge.weight = edge.weight - bottleneck;
+
+            if (edge.weight === 0) {
+                graph.removeEdge(u, v);
+            }
+        });
+    }
+
+    useEdgeOrCreate(u, v) {
+        let edge = this.residual.findEdge(u, v);
+        if (edge) {
+            return edge;
+        }
+        this.residual.addEdge(u, v);
+        return this.residual.findEdge(u, v);
     }
 
     /**
@@ -54,7 +64,7 @@ class FordFulkerson {
      * BFS is much better as it returns shorter paths
      */
     extendingPath() {
-        const dfs = new DFS(this.digraph);
+        const dfs = new DFS(this.residual);
         const pathExists = dfs.search(this.source, this.sink);
         if (!pathExists) {
             console.log("s !-> t");
@@ -65,14 +75,12 @@ class FordFulkerson {
         return dfs.order;
     }
 
-    extendFlow(p) {
-        cfp[y - 1] = Math.Min(cfp[x], cp);
-
-    }
-
-    extendFlowForEdge(u, v) {
-        const flowData = this.digraph.weight(u, v);
-        // flowData
+    forEachEdge(path, cb) {
+        for (let i = 0; i < path.length - 1; i++) {
+            const u = path[i];
+            const v = path[i + 1];
+            cb(u, v);
+        }
     }
 
     initFlow() {
@@ -86,11 +94,6 @@ class FordFulkerson {
         // if (!this.isFeasible(G, s, t))
         //     throw new Error("Initial flow is infeasible");
     }
-
-    isFeasible() {
-
-    }
-
 }
 
 module.exports = FordFulkerson;
