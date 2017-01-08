@@ -74,7 +74,7 @@ class DFS {
             this.order.push(node);
             this.visited[node] = true;
             if (end === node) {
-                return;
+                return true;
             }
             this.addOrderedNodesToStack(this.digraph.getSiblings(node));
         }
