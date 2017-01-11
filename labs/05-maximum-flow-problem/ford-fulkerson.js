@@ -1,4 +1,4 @@
-const DFS = require(`./dfs`);
+const BFS = require(`./bfs`);
 
 class FordFulkerson {
     constructor(digraph, source, sink) {
@@ -10,7 +10,7 @@ class FordFulkerson {
     startAlgorithm() {
         let maxFlow = 0;
         let p = this.extendingPath();
-        while (p.length > 0) {
+        while (p.length > 1) {
             const bottleneck = this.bottleneckCapacity(p);
             this.residualGraphUpdate(p, bottleneck);
 
@@ -72,20 +72,16 @@ class FordFulkerson {
         return this.residual.findEdge(u, v);
     }
 
-    /**
-     * Using DFS is not best solution, but I already had it implemented. :)
-     * BFS is much better as it returns shorter paths
-     */
     extendingPath() {
-        const dfs = new DFS(this.residual);
-        const pathExists = dfs.search(this.source, this.sink);
+        const bfs = new BFS(this.residual);
+        const pathExists = bfs.search(this.source, this.sink);
         if (!pathExists) {
             console.log("s !-> t");
             return [];
         }
 
-        console.log("s -> t", dfs.order);
-        return dfs.order;
+        console.log("s -> t", bfs.pathTo(this.sink));
+        return bfs.pathTo(this.sink);
     }
 
     forEachEdge(path, cb) {
