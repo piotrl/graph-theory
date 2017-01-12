@@ -16,6 +16,8 @@ describe(`MaximalMatching method`, function () {
                 ;
             const maximalMatching = new MaximalMatching(network, "s", "t");
             const isBipartite = maximalMatching.validateBipartite();
+            const groups = maximalMatching.getGroups();
+            console.log(groups);
 
             assert.isFalse(isBipartite);
         });
@@ -29,6 +31,8 @@ describe(`MaximalMatching method`, function () {
                 ;
             const maximalMatching = new MaximalMatching(network, "s", "t");
             const isBipartite = maximalMatching.validateBipartite();
+            const groups = maximalMatching.getGroups();
+            console.log(groups);
 
             assert.isTrue(isBipartite);
         });

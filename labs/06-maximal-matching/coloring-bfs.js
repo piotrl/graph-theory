@@ -5,6 +5,7 @@ class ColoringBfs {
             .map(key => ({key: key, visited: false, color: undefined}));
 
         this.queue = [];
+        this.conflict = false;
     }
 
     search(start) {
@@ -51,12 +52,11 @@ class ColoringBfs {
         node = this.property(node);
         neighbour = this.property(neighbour);
         if (neighbour.color === undefined) {
-            neighbour.color = node.color + 1;
+            neighbour.color = (node.color + 1) % 2;
         } else if (neighbour.color === node.color) {
-            throw new Error(`Color conflict for (${node.key}, ${neighbour.key}). Same color: ${node.color}`);
+            console.log(`Color conflict for (${node.key}, ${neighbour.key}). Same color: ${node.color}`);
+            this.conflict = true;
         }
-
-        return false;
     }
 
     markVisited(node) {
