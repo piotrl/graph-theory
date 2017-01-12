@@ -4,18 +4,20 @@ class BFS {
         this.visited = this.digraph.nodes
             .map(key => ({key: key, visited: false}));
         this.path = {};
-        this.digraph.nodes
-            .forEach(key => {
-                this.path[key] = [key];
-            });
-
         this.order = [];
         this.queue = [];
         this.found = false;
     }
 
     pathTo(node) {
-        return this.path[node];
+        let previous = this.path[node];
+        const path = [node];
+        while (previous !== undefined) {
+            path.unshift(previous);
+            previous = this.path[previous];
+        }
+
+        return path;
     }
     
     search(start, end) {
@@ -52,7 +54,7 @@ class BFS {
     }
 
     addToQueue(previous, siblings) {
-        siblings.sort()
+        siblings
             .forEach(nextNode => {
                 if (this.isVisited(nextNode)) return;
                 this.updatePath(nextNode, previous);
@@ -61,7 +63,7 @@ class BFS {
     }
 
     updatePath(node, previous) {
-        this.path[node] = [...this.path[previous], node];
+        this.path[node] = previous;
     }
 
     markVisited(node) {

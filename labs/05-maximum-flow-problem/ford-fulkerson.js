@@ -28,7 +28,7 @@ class FordFulkerson {
             u: "",
             v: ""
         };
-        this.forEachEdge(path, (u, v) => {
+        forEachEdge(path, (u, v) => {
             const nettoValue = this.residual.weight(u, v);
             if (nettoValue < min.bottle) {
                 min.bottle = nettoValue;
@@ -42,7 +42,7 @@ class FordFulkerson {
 
     residualGraphUpdate(path, bottleneck) {
         const graph = this.residual;
-        this.forEachEdge(path, (u, v) => {
+        forEachEdge(path, (u, v) => {
             const edge = this.useEdgeOrCreate(u, v);
             const symmetric = this.useEdgeOrCreate(v, u);
 
@@ -74,7 +74,7 @@ class FordFulkerson {
 
     extendingPath() {
         const bfs = new BFS(this.residual);
-        const pathExists = bfs.search(this.source, this.sink);
+        const pathExists = bfs.searchSingleNode(this.source, this.sink);
         if (!pathExists) {
             console.log("s !-> t");
             return [];
@@ -83,20 +83,13 @@ class FordFulkerson {
         console.log("s -> t", bfs.pathTo(this.sink));
         return bfs.pathTo(this.sink);
     }
+}
 
-    forEachEdge(path, cb) {
-        for (let i = 0; i < path.length - 1; i++) {
-            const u = path[i];
-            const v = path[i + 1];
-            cb(u, v);
-        }
-    }
-
-    validate() {
-        if (this.source === this.sink)
-            throw new Error("Source equals sink");
-        // if (!this.isFeasible(G, s, t))
-        //     throw new Error("Initial flow is infeasible");
+function forEachEdge(path, cb) {
+    for (let i = 0; i < path.length - 1; i++) {
+        const u = path[i];
+        const v = path[i + 1];
+        cb(u, v);
     }
 }
 
