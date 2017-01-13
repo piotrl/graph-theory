@@ -6,7 +6,7 @@ const assert = chai.assert;
 
 describe(`MaximalMatching method`, function () {
     describe(`Maximal matching`, function () {
-        it(`Find`, function () {
+        it(`Find simple example`, function () {
             const network = new DiGraph(["a", "b", "c", "d"])
                     .addEdge("a", "b")
                     .addEdge("b", "c")
@@ -14,8 +14,60 @@ describe(`MaximalMatching method`, function () {
                     .addEdge("d", "a")
                     .symetricEdges()
                 ;
-            const maximalMatching = new MaximalMatching(network, "s", "t");
+            const maximalMatching = new MaximalMatching(network);
             maximalMatching.findMaximalMatching();
+        });
+
+        // http://eduinf.waw.pl/inf/alg/001_search/0147.php
+        it(`Example from website`, function () {
+            const network = new DiGraph([0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
+                    .addEdge(0, 5)
+                    .addEdge(0, 7)
+                    .addEdge(0, 9)
+                    .addEdge(1, 6)
+                    .addEdge(1, 8)
+                    .addEdge(2, 5)
+                    .addEdge(2, 6)
+                    .addEdge(2, 7)
+                    .addEdge(2, 8)
+                    .addEdge(2, 9)
+                    .addEdge(3, 7)
+                    .addEdge(3, 8)
+                    .addEdge(4, 6)
+                    .addEdge(4, 8)
+                    .symetricEdges()
+                ;
+            const maximalMatching = new MaximalMatching(network);
+            maximalMatching.findMaximalMatching();
+        });
+    });
+
+    describe("Build network from graph", function () {
+        it(`Validate complicated bipartie graph`, function () {
+            const graph = new DiGraph([0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
+                    .addEdge(0, 5)
+                    .addEdge(0, 7)
+                    .addEdge(0, 9)
+                    .addEdge(1, 6)
+                    .addEdge(1, 8)
+                    .addEdge(2, 5)
+                    .addEdge(2, 6)
+                    .addEdge(2, 7)
+                    .addEdge(2, 8)
+                    .addEdge(2, 9)
+                    .addEdge(3, 7)
+                    .addEdge(3, 8)
+                    .addEdge(4, 6)
+                    .addEdge(4, 8)
+                    .symetricEdges()
+                ;
+
+            const maximalMatching = new MaximalMatching(graph);
+            const isBipartite = maximalMatching.validateBipartite();
+            const network = maximalMatching.transformToNetowrk();
+            console.log(network);
+
+            assert.isTrue(isBipartite);
         });
     });
 
@@ -49,6 +101,34 @@ describe(`MaximalMatching method`, function () {
             console.log(groups);
 
             assert.isTrue(isBipartite);
+        });
+
+        it(`Validate complicated bipartie graph`, function () {
+            const network = new DiGraph([0, 1, 2, 3, 4, 5, 6, 7, 8, 9])
+                    .addEdge(0, 5)
+                    .addEdge(0, 7)
+                    .addEdge(0, 9)
+                    .addEdge(1, 6)
+                    .addEdge(1, 8)
+                    .addEdge(2, 5)
+                    .addEdge(2, 6)
+                    .addEdge(2, 7)
+                    .addEdge(2, 8)
+                    .addEdge(2, 9)
+                    .addEdge(3, 7)
+                    .addEdge(3, 8)
+                    .addEdge(4, 6)
+                    .addEdge(4, 8)
+                    .symetricEdges()
+                ;
+
+            const maximalMatching = new MaximalMatching(network);
+            const isBipartite = maximalMatching.validateBipartite();
+            const groups = maximalMatching.getGroups();
+            console.log(groups);
+
+            assert.isTrue(isBipartite);
+            assert.deepEqual(groups, {'0': [5, 6, 7, 8, 9], '1': [0, 1, 2, 3, 4]});
         });
     });
 });

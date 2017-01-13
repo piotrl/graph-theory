@@ -15,16 +15,21 @@ class MaximalMatching {
         const fordFulkerson = new FordFulkerson(this.network, "s", "t");
         fordFulkerson.startAlgorithm();
 
-        for (const node of this.groupBlue) {
+        let maxMatchingAmount = 0;
+        for (const node of this.groupRed) {
             const siblings = fordFulkerson.residual.getSiblings(node);
+
             for (const sibling of siblings) {
                 if (sibling === "s" || sibling === "t") continue;
 
                 if (fordFulkerson.residual.weight(node, sibling) === 1) {
                     console.log(`(${node}, ${sibling})`);
+                    maxMatchingAmount++;
                 }
             }
         }
+        console.log(`Maximum matching: ${maxMatchingAmount}`)
+        return maxMatchingAmount;
     }
 
     transformToNetowrk() {
