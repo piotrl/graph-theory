@@ -1,4 +1,5 @@
 const ColoringBfs = require("./coloring-bfs");
+const DiGraph = require("../04-djikstra-shortest-path/digraph-weight");
 
 class MaximalMatching {
     constructor(digraph) {
@@ -6,22 +7,30 @@ class MaximalMatching {
     }
 
     transformToNetowrk() {
-        this.network = Object.assign(this.digraph);
+        this.network = new DiGraph(this.digraph.nodes);
         const groups = this.getGroups();
-        this.addEntryPoint("s", groups[0]);
-        this.addEntryPoint("t", groups[1]);
-
+        this.addEntryPoints(groups[0], groups[1]);
         for (const edge of this.network.edges) {
             edge.weight = 1;
         }
+
+        return this.network;
     }
 
-    addEntryPoint(point, nodeGroup) {
+    addEntryPoints(nodeGroupBlue, nodeGroupRed) {
+        let point = "s";
         this.network.nodes.push(point);
-
-        for (const node of nodeGroup) {
+        for (const node of nodeGroupBlue) {
             if (node === point) continue;
             this.network.addEdge(point, node);
+            for (const sibling of this.digraph.getSiblings(node)) {
+                this.network.addEdge(node, sibling);
+            }
+        }
+        point = "t";
+        this.network.nodes.push(point);
+        for (const node of nodeGroupRed) {
+            if (node === point) continue;
             this.network.addEdge(node, point);
         }
     }
