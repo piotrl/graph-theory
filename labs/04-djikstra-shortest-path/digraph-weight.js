@@ -49,6 +49,11 @@ class DiGraph {
         return Object.assign(this._lists[vertex]);
     }
 
+    addNode(node) {
+        this._lists[node] = [];
+        this.nodes.push(node);
+    }
+
     addEdge(from, to, weight) {
         const vertexList = this._lists[from];
 

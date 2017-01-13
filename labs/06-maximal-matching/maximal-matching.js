@@ -1,15 +1,38 @@
-const ColoringBfs = require("./coloring-bfs");
 const DiGraph = require("../04-djikstra-shortest-path/digraph-weight");
+const FordFulkerson = require("../05-maximum-flow-problem/ford-fulkerson");
+const ColoringBfs = require("./coloring-bfs");
 
 class MaximalMatching {
     constructor(digraph) {
         this.digraph = Object.assign(digraph);
     }
 
+    findMaximalMatching() {
+        if (!this.validateBipartite()) {
+            throw new Error("Not valid bipartie graph");
+        }
+        this.transformToNetowrk();
+        const fordFulkerson = new FordFulkerson(this.network, "s", "t");
+        fordFulkerson.startAlgorithm();
+
+        for (const node of this.groupBlue) {
+            const siblings = fordFulkerson.residual.getSiblings(node);
+            for (const sibling of siblings) {
+                if (sibling === "s" || sibling === "t") continue;
+
+                if (fordFulkerson.residual.weight(node, sibling) === 1) {
+                    console.log(`(${node}, ${sibling})`);
+                }
+            }
+        }
+    }
+
     transformToNetowrk() {
         this.network = new DiGraph(this.digraph.nodes);
         const groups = this.getGroups();
-        this.addEntryPoints(groups[0], groups[1]);
+        this.groupBlue = groups[0];
+        this.groupRed = groups[1];
+        this.addEntryPoints(this.groupBlue, this.groupRed);
         for (const edge of this.network.edges) {
             edge.weight = 1;
         }
@@ -19,7 +42,7 @@ class MaximalMatching {
 
     addEntryPoints(nodeGroupBlue, nodeGroupRed) {
         let point = "s";
-        this.network.nodes.push(point);
+        this.network.addNode(point);
         for (const node of nodeGroupBlue) {
             if (node === point) continue;
             this.network.addEdge(point, node);
@@ -28,7 +51,7 @@ class MaximalMatching {
             }
         }
         point = "t";
-        this.network.nodes.push(point);
+        this.network.addNode(point);
         for (const node of nodeGroupRed) {
             if (node === point) continue;
             this.network.addEdge(node, point);

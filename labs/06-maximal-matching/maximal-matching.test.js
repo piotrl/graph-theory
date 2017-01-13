@@ -5,6 +5,20 @@ const MaximalMatching = require(`./maximal-matching`);
 const assert = chai.assert;
 
 describe(`MaximalMatching method`, function () {
+    describe(`Maximal matching`, function () {
+        it(`Find`, function () {
+            const network = new DiGraph(["a", "b", "c", "d"])
+                    .addEdge("a", "b")
+                    .addEdge("b", "c")
+                    .addEdge("c", "d")
+                    .addEdge("d", "a")
+                    .symetricEdges()
+                ;
+            const maximalMatching = new MaximalMatching(network, "s", "t");
+            maximalMatching.findMaximalMatching();
+        });
+    });
+
     describe(`Validate bipartie graph`, function () {
         it(`Validate wrong bipartie graph`, function () {
             const network = new DiGraph(["a", "b", "c", "d"])
