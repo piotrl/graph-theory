@@ -7,6 +7,21 @@ const assert = chai.assert;
 describe(`Fleury Euler Cycles`, function () {
     // http://www.geeksforgeeks.org/fleurys-algorithm-for-printing-eulerian-path/
     describe(`Find cycle`, function () {
+        it(`King's bridges problem`, function () {
+            const network = new DiGraph(["a", "b", "c", "d"])
+                    .addEdge("a", "b")
+                    .addEdge("b", "c")
+                    .addEdge("d", "a")
+                    .addEdge("d", "b")
+                    .addEdge("d", "c")
+                    .symetricEdges()
+                ;
+            const eulerCycles = new FleuryEulerCycles(network);
+            const hasEulerCycle = eulerCycles.hasEulerCycle();
+            assert.isFalse(hasEulerCycle);
+        });
+
+
         it(`Example #1 without euler cycle`, function () {
             const network = new DiGraph([0, 1, 2, 3])
                     .addEdge(0, 1)
