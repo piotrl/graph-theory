@@ -64,9 +64,7 @@ describe(`Fleury Euler Cycles`, function () {
                 ;
             const eulerCycles = new FleuryEulerCycles(network);
             const hasEulerCycle = eulerCycles.hasEulerCycle();
-            assert.isTrue(hasEulerCycle);
-            const cycle = eulerCycles.findGraphCycle();
-            eulerCycles.printCycle(cycle);
+            assert.isFalse(hasEulerCycle);
         });
 
         it(`Example #4`, function () {
