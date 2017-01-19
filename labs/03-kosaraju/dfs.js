@@ -61,28 +61,26 @@ class DFS {
     search(start) {
         const node = start;
 
-        if (node && !this.visited[node]) {
+        if (node && !this.isVisited(node)) {
             this.stack.push(node);
         }
 
         while (this.stack.length > 0) {
             const node = this.stack.pop();
-            if (this.visited[node]) {
+            if (this.isVisited(node)) {
                 continue;
             }
 
             this.order.push(node);
-            this.visited[node] = true;
+            this.markVisited(node);
             this.addOrderedNodesToStack(this.digraph.getSiblings(node));
         }
-
-        return false;
     }
 
     addOrderedNodesToStack(siblings) {
         siblings.sort().reverse() // Alphabetical order
             .forEach(nextNode => {
-                if (this.visited[nextNode]) return;
+                if (this.isVisited(nextNode)) return;
 
                 this.stack.push(nextNode);
             });

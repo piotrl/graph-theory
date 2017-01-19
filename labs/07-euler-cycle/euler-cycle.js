@@ -7,20 +7,18 @@ class FleuryEulerCycles {
         this.cycle = [];
     }
 
-    findStartingPoint() {
-        let u = this.digraph.first;
+    hasEulerCycle() {
         for (const node of this.digraph.nodes) {
             const siblings = this.digraph.getSiblings(node);
             if (siblings.length % 2 !== 0) {
-                u = node;
-                break;
+                return false;
             }
         }
 
-        return u;
+        return true;
     }
 
-    findGraphCycle(fromVertex) {
+    findGraphCycle(fromVertex = this.digraph.first) {
         for (const toVertex of this.digraph.getSiblings(fromVertex)) {
             if (this.isValidNextEdge(fromVertex, toVertex)) {
                 this.cycle.push([fromVertex, toVertex]);
